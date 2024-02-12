@@ -107,13 +107,17 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: 'projects/${{ vars.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/idpool/providers/idprovider'
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
       - name: Deploy function
         id: deploy
-        uses: google-github-actions/deploy-cloud-functions@main
+        uses: google-github-actions/deploy-cloud-functions@v2
         with:
           name: translate
           entry_point: Translate
           runtime: go116
-          credentials: ${{ secrets.gcp_credentials }}
       - id: test
         run: curl "${{ steps.deploy.outputs.url }}/hello"
