@@ -120,3 +120,23 @@ jobs:
           runtime: go118
       - id: test
         run: curl "${{ steps.deploy.outputs.url }}/hello"
+  deploy-paas:
+    name: Deploy PaaS
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code into the Go module directory
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Deploy App
+        id: deploy
+        uses: google-github-actions/deploy-app-engine@main
+      - id: test
+        run: curl "${{ steps.deploy.outputs.url }}/translate/hello"
