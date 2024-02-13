@@ -19,6 +19,8 @@ func Translate(word string, language string) string {
 		return "hei"
 	case "german":
 		return "hallo"
+	case "french":
+		return "bonjour"
 	default:
 		return ""
 	}
