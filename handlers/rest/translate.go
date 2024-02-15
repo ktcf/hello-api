@@ -2,17 +2,34 @@ package rest
 
 import (
 	"encoding/json"
-	"github.com/ktcf/hello-api/translation"
 	"net/http"
 	"strings"
 )
+
+type Translator interface {
+	Translate(word string, language string) string
+}
+
+// TranslateHandler will translate calls for caller.
+type TranslateHandler struct {
+	service Translator
+}
+
+// NewTranslateHandler will create a new instance if the handler using a
+// translation service.
+func NewTranslateHandler(service Translator) *TranslateHandler {
+	return &TranslateHandler{service}
+}
 
 type Resp struct {
 	Language    string `json:"language"`
 	Translation string `json:"translation"`
 }
 
-func TranslateHandler(w http.ResponseWriter, r *http.Request) {
+// TranslateHandler will take a given request with a path value of the
+// word to be translated and a query parameter of the
+// language to translate to.
+func (t *TranslateHandler) TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	enc := json.NewEncoder(w)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
@@ -21,7 +38,7 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 		language = "english"
 	}
 	word := strings.ReplaceAll(r.URL.Path, "/", "")
-	translate := translation.Translate(word, language)
+	translate := t.service.Translate(word, language)
 	if translate == "" {
 		w.WriteHeader(404)
 		return

@@ -4,7 +4,16 @@ import (
 	"strings"
 )
 
-func Translate(word string, language string) string {
+// StaticService has data that does not change.
+type StaticService struct{}
+
+// NewStaticService will create a new instance of the static service.
+func NewStaticService() *StaticService {
+	return &StaticService{}
+}
+
+// Translate a given word to a given language.
+func (s *StaticService) Translate(word string, language string) string {
 	word = sanitizeInput(word)
 	language = sanitizeInput(language)
 

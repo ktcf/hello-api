@@ -3,13 +3,14 @@ package rest_test
 import (
 	"encoding/json"
 	"github.com/ktcf/hello-api/handlers/rest"
+	"github.com/ktcf/hello-api/translation"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
 func TestTranslateAPI(t *testing.T) {
-	tt := []struct { // <1>
+	tt := []struct {
 		Endpoint            string
 		StatusCode          int
 		ExpectedLanguage    string
@@ -29,7 +30,8 @@ func TestTranslateAPI(t *testing.T) {
 		},
 	}
 
-	handler := http.HandlerFunc(rest.TranslateHandler)
+	underTest := rest.NewTranslateHandler(translation.NewStaticService())
+	handler := http.HandlerFunc(underTest.TranslateHandler)
 
 	for _, test := range tt {
 		rr := httptest.NewRecorder()
