@@ -2,7 +2,7 @@ GO_VERSION := 1.18
 
 .PHONY: install-go init-go
 
-setup: install-go init-go install-lint
+setup: install-go init-go install-lint copy-hooks
 
 build:
 	go build -o api cmd/main.go
@@ -37,3 +37,7 @@ init-go:
 	echo "export GOPATH=$(HOME)/go" >> $(HOME)/.bashrc
 	echo "export PATH=\$$PATH:\$$GOPATH/bin:/usr/local/go/bin" >> $(HOME)/.bashrc
 	source $(HOME)/.bashrc
+
+copy-hooks:
+	chmod +x scripts/hooks/*
+	cp -r screipts/hooks/ .git/.
