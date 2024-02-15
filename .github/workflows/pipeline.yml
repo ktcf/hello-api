@@ -139,4 +139,4 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-appengine@v1
       - id: test
-        run: curl "${{ steps.deploy.outputs.url }}/translate/hello"
+        run: curl "${{ steps.deploy.outputs.url }}/hello"
