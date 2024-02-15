@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/ktcf/hello-api/handlers"
 	"github.com/ktcf/hello-api/handlers/rest"
+	"github.com/ktcf/hello-api/translation"
 	"log"
 	"net/http"
 )
@@ -12,7 +13,9 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/hello", rest.TranslateHandler)
+	translationService := translation.NewStaticService()
+	translateHandler := rest.NewTranslateHandler(translationService)
+	mux.HandleFunc("/hello", translateHandler.TranslateHandler)
 	mux.HandleFunc("/health", handlers.HealthCheck)
 
 	log.Printf("listening on %s", addr)
