@@ -23,6 +23,9 @@ lint:
 install-lint:
 	sudo curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(go env GOPATH)/bin v1.41.1
 
+check-format:
+	test -z $$(go fmt ./...)
+
 #TODO add MacOS support
 install-go:
 	wget "https://golang.org/dl/go$(GO_VERSION).linux-amd64.tar.gz"
