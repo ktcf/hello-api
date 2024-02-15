@@ -8,6 +8,25 @@ on:
     branches:
       - main
 jobs:
+  format-check:
+    name: Check formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.18
+      - name: Checkout code into the Go module directory
+        uses: actions/checkout@v2
+      - name: Vet
+        run: go vet ./...
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint
+        uses: golangci/golangci-lint-action@v2
   test:
     name: Test Application
     runs-on: ubuntu-latest
