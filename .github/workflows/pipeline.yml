@@ -138,6 +138,11 @@ jobs:
         run: pack build gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello-api:latest
           --builder gcr.io/buildpacks/builder:v1
 
+      - name: Authenticate with Google Cloud
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
@@ -159,8 +164,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Tag for Github
-        run: docker image tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello-api:latest 
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        run: docker image tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello-api:latest ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
       - name: Push to GHCR
         run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
