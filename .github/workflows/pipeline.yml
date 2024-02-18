@@ -162,10 +162,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Tag for Github
-        run: docker image tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello-api:latest ghcr.io/hello-api:latest
+        run: docker image tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/hello-api:latest ghcr.io/ktcf/hello-api:latest
 
       - name: Push to GHCR
-        run: docker push ghcr.io/hello-api:latest
+        run: docker push ghcr.io/ktcf/hello-api:latest
 
 #  deploy-function:
 #    name: Deploy FaaS
