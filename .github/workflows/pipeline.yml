@@ -194,7 +194,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Min
-        run: docker build -t ghcr.io/ktcf/hello-api:latest:min
+        run: docker build -t ghcr.io/ktcf/hello-api:latest:min .
 
       - name: Build Dev
         run: docker build -t ghcr.io/ktcf/hello-api:latest:dev --target=dev .
