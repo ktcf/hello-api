@@ -1,19 +1,30 @@
 package main
 
 import (
+	"log"
+	"net/http"
+
+	"github.com/ktcf/hello-api/config"
 	"github.com/ktcf/hello-api/handlers"
 	"github.com/ktcf/hello-api/handlers/rest"
 	"github.com/ktcf/hello-api/translation"
-	"log"
-	"net/http"
 )
 
 func main() {
-	addr := ":8080"
+	cfg := config.LoadConfiguration()
+	addr := cfg.Port
 
 	mux := http.NewServeMux()
 
-	translationService := translation.NewStaticService()
+	var translationService rest.Translator
+	translationService = translation.NewStaticService()
+
+	if cfg.LegacyEndpoint != "" {
+		log.Printf("creating external translation client: %s", cfg.LegacyEndpoint)
+		client := translation.NewHelloClient(cfg.LegacyEndpoint)
+		translationService = translation.NewRemoteService(client)
+	}
+
 	translateHandler := rest.NewTranslateHandler(translationService)
 	mux.HandleFunc("/hello", translateHandler.TranslateHandler)
 	mux.HandleFunc("/health", handlers.HealthCheck)
